@@ -1,0 +1,8 @@
+import {esc,time} from '../utils/format.js';import {table} from './common/table.js';
+const newKey=()=>window.crypto?.randomUUID?crypto.randomUUID():'key-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+const quotaText=q=>'小组 '+Object.entries(q.groups).map(([k,v])=>`${esc(k)}×${v}`).join('、')+'；优先级 '+Object.entries(q.priorities).map(([k,v])=>`${esc(k)}×${v}`).join('、');
+export function samplePanel(run,batches,canEdit){
+ const deps=[...new Set(run.snapshot.sources.map(s=>s.department))].sort(),prios=[...new Set(run.snapshot.sources.map(s=>s.priority))].sort();
+ const form=canEdit?`<form id="sample-form" data-id="${run.id}"><input type="hidden" name="request_key" value="${newKey()}"><div class="form-grid">${deps.map(x=>`<label>小组「${esc(x)}」名额<input name="g:${esc(x)}" type="number" min="0" max="100000" value="0"></label>`).join('')}${prios.map(x=>`<label>优先级「${esc(x)}」名额<input name="p:${esc(x)}" type="number" min="0" max="100000" value="0"></label>`).join('')}</div><button>按名额抽样</button><p class="hint">两套名额需同时凑齐，超时单优先、同分按冻结行号取前；同月已抽中的原单（含更正单）自动避开；凑齐后整批占用，失败重试不重复。</p></form>`:'';
+ const list=(batches||[]).map(b=>`<article class="batch"><h3>批次 #${b.id} · ${time(b.created)} · ${esc(b.actor)}</h3><p>名额：${quotaText(b.quotas)} · 共 ${b.selected.length} 单，其中超时 ${b.overdue} 单</p>${table(b.selected.map(s=>({'冻结行号':s.row+1,'原单编号':s.order_no,'小组':s.department,'优先级':s.priority,'月份':s.period,'业务分钟':s.minutes,'超时':s.overdue?'是':'否'})))}</article>`).join('');
+ return `<details open class="samples"><summary>月度抽样 · 复算不再重复抽中同一原单</summary>${form}${list||'<p class="empty">尚未抽样。填写小组与优先级名额后抽取，同月原单不会重复抽中。</p>'}</details>`}

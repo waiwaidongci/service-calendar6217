@@ -16,6 +16,7 @@
   "label": "服务时窗样本",
   "policy_label": "业务日历与SLA",
   "fields": {
+    "order_no": "原单编号",
     "period": "结算月份",
     "department": "分析小组",
     "opened": "开始（ISO+时区）",
@@ -23,6 +24,7 @@
     "priority": "优先级"
   },
   "example": {
+    "order_no": "OD-2026-110413",
     "period": "2026-11",
     "department": "数据建模组",
     "opened": "2026-11-13T16:30:00+08:00",

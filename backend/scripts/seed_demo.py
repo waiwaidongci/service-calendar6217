@@ -10,7 +10,9 @@ from src.services.validation import validate_source
 def demo_rows():
  rng=random.Random(42);rows=[]
  for i in range(240):
-  day=1+i%20;rows.append({'period':'2026-11','department':['数据建模组','数据采样组','数据核验组'][i%3],'opened':f'2026-11-{day:02}T10:30:00+08:00','closed':f'2026-11-{day:02}T16:30:00+08:00','priority':['普通','紧急'][i%2]})
+  day=1+i%20;order_no=f'OD-2026-{i+1:04d}'
+  if i>=228: j=i-228;day=19+j;order_no=f'OD-2026-{j+1:04d}'  # 月末更正单：沿用原单编号，仍算同一单
+  rows.append({'order_no':order_no,'period':'2026-11','department':['数据建模组','数据采样组','数据核验组'][i%3],'opened':f'2026-11-{day:02}T10:30:00+08:00','closed':f'2026-11-{day:02}T16:30:00+08:00','priority':['普通','紧急'][i%2]})
  return rows
 
 def seed():

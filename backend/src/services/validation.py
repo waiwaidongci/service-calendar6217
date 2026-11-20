@@ -5,7 +5,7 @@ def number(value,name,minimum=0,integer=False):
  return value
 def validate_source(d):
  if not isinstance(d,dict) or set(d)!=set(CONFIG['fields']): raise ValueError('底稿字段必须与业务字段一致')
- for key in ('period','department'):
+ for key in ('period','department','order_no'):
   if not isinstance(d[key],str) or not 1<=len(d[key])<=100: raise ValueError(key+'不能为空或过长')
  from datetime import datetime
  from zoneinfo import ZoneInfo

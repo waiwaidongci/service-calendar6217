@@ -3,7 +3,7 @@ from pathlib import Path
 import redis
 from src.config.database import Base,engine,Session
 from src.config.settings import REDIS_URL
-from src.models import identity,source,run
+from src.models import identity,source,run,sampling
 from src.models.run import Run
 from src.services.calculation import calculate
 from src.services.delivery import tick
